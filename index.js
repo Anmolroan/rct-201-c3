@@ -40,6 +40,26 @@ app.post("/user/login",(req,res) => {
         }
     })
 })
+app.post("/user/logout",(req,res)=>{
+    fs.readFile("./db.json",{encoding: 'utf8'},(err, data) => {
+        const parsed = JSON.parse(data);
+        
+          
+            parsed.users.map((user) =>{
+                if(user.username===req.body.username&&user.password===req.body.password){
+                    
+                    user.token=undefined;
+                   
+                }
+            })
+            fs.writeFile("./db.json",JSON.stringify(parsed),{encoding: 'utf8'},()=>{
+                res.status(201).send({status: "user logged out successfully" });
+            })
+
+        
+       
+    })
+})
 app.listen(1234,() => {
     console.log('server is listening on http://localhost:1234');
 })
