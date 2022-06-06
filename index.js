@@ -14,6 +14,31 @@ app.post("/user/create", function(req, res) {
             res.status(201).send({status: 'user created'+req.body.id});
         })
     })
+});
+app.post("/user/login",(req,res) => {
+    fs.readFile("./db.json",{encoding: 'utf8'},(err, data) => {
+        const parsed = JSON.parse(data);
+        var flag =false;
+        if(req.body.username.length===0 ||req.body.password.length===0){
+            res.status(400).send({status: 'please provide username and password'})
+        }else {
+            var t;
+            parsed.users.map((user) =>{
+                if(user.username===req.body.username&&user.password===req.body.password){
+                    t=uuidv4()
+                    user.token=t;
+                    flag=true;
+                }
+            })
+            fs.writeFile("./db.json",JSON.stringify(parsed),{encoding: 'utf8'},()=>{
+                res.status(201).send({status: 'status: "Login Successful'+t});
+            })
+
+        }
+        if(!flag){
+            res.status(401).send({status: 'Invalid Credentials'})
+        }
+    })
 })
 app.listen(1234,() => {
     console.log('server is listening on http://localhost:1234');
