@@ -1,3 +1,21 @@
 const express = require('express');
+const res = require('express/lib/response');
 const app = express();
 const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
+const userid =uuidv4();
+app.use(express.json());
+app.use(express.urlencoded({ extended:true}));
+app.post("/user/create", function(req, res) {
+    fs.readFile("./db.json",{encoding: 'utf8'},(err, data) => {
+        const parsed = JSON.parse(data);
+        parsed.users=[...parsed.users,req.body];
+        fs.writeFile("./db.json",JSON.stringify(parsed),{encoding: 'utf8'},()=>{
+            res.status(201).send({status: 'user created'+req.body.id});
+        })
+    })
+})
+app.listen(1234,() => {
+    console.log('server is listening on http://localhost:1234');
+})
+console.log(userid)
