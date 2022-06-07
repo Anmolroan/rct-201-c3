@@ -4,6 +4,7 @@ const app = express();
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const userid =uuidv4();
+const PORT =process.env.PORT ||1234
 app.use(express.json());
 app.use(express.urlencoded({ extended:true}));
 app.post("/user/create", function(req, res) {
@@ -60,7 +61,6 @@ app.post("/user/logout",(req,res)=>{
        
     })
 })
-app.listen(1234,() => {
-    console.log('server is listening on http://localhost:1234');
+app.listen(PORT,() => {
+    console.log(`server is listening on http://localhost:${PORT}`);
 })
-console.log(userid)
