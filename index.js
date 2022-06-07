@@ -61,6 +61,9 @@ app.post("/user/logout",(req,res)=>{
        
     })
 })
+app.get("/", (req, res) => {
+    res.send({status: "to check"})
+})
 app.listen(PORT,() => {
     console.log(`server is listening on http://localhost:${PORT}`);
 })
